@@ -1,0 +1,24 @@
+@echo off
+set LOGFILE=batch.log
+call :LOG > %LOGFILE%
+exit /B
+
+:LOG
+echo Command: "Setting up Source and Destination .."
+
+set "source=s3://clibucket0102"
+set "destination=c:/test"
+
+echo Command: "Copy Files from Source to Destination"
+
+aws s3 cp "%source%/input" "%destination%/input" --recursive --exclude "*" --include "*.png" --exclude "*/*"
+
+echo Command: "Copy Files from Source to Destination is completed"
+
+echo Command: "==============================================="
+
+echo Command: "Move Files from input folder to backup folder"
+
+aws s3 mv "%source%/input" "%source%/input/backup" --recursive --exclude "*" --include "*.png" --exclude "*/*"
+
+exit /b
